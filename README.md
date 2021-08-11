@@ -6,6 +6,7 @@ Validate a zone file
 Convert a zone file to json and convert it back to txt
 
 
+## How to use it
 
 
 
