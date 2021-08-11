@@ -1,2 +1,2 @@
 # DNSzonefileManager
-Phyton library that provides methods for DNS zonefiles
+A Phyton library that provides methods for DNS zonefiles
