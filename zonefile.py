@@ -15,16 +15,16 @@ class ParseZoneFile:
    """
    This Class parses a zone text file an stores its contents
    in a dictionary where record types are the keys of the dictionary.
-   
+
    print(ParseZoneFile.getdict()['a']) lists all A records of the zone file.
    All record types are stored in lower case.
 
    * showinput() - gives you the original zone file
-   
+
    * showjson(Pretty=True)  - gives you the zone file in json format
-   
+
    * getdict()   - gives you the plain dictionary
-   
+
    supported record types are:
    '$ORIGIN', '$TTL', 'SOA', 'NS', 'A', 'AAAA', 'HINFO', 'CNAME', 'MX', 'PTR', 'TXT', 'SRV', 'URI'
 
@@ -36,7 +36,7 @@ class ParseZoneFile:
       self.__current_ttl = ""
       self.__ignore_invalid = IgnoreInvalidLines
       self.__ruleerror = []
-      
+
       self._text = text
       self._zonedict = defaultdict(list)
 
@@ -62,7 +62,7 @@ class ParseZoneFile:
    def showinput(self):
       return self.__input
 
-   
+
    def showjson(self, Pretty=False):
 
       if Pretty:
@@ -105,7 +105,7 @@ class ParseZoneFile:
       self._ShakeoffComments()
       #lines = self._text.split("\n")
       #print("---")
-      
+
       self._Levelout()
       #lines = self._text.split("\n")
       #print("---")
@@ -113,7 +113,7 @@ class ParseZoneFile:
       self._Fillup()
       #lines = self._text.split("\n")
       #print("---")
-      
+
       self._CheckRule_01() # ORIGIN
       self._CheckRule_02() # TTL
       self._CheckRule_03() # SOA
@@ -132,7 +132,7 @@ class ParseZoneFile:
       self._CheckRule_16() # TXT
       self._CheckRule_17() # SRV
       self._CheckRule_18() # URI
-            
+
       #lines = self._text.split("\n")
       #for line in lines:
       #   print(line)
@@ -158,7 +158,7 @@ class ParseZoneFile:
 
       self._text = "\n".join(ret)
 
-   
+
    def _Levelout(self):
       """
       Levelout the text
@@ -269,7 +269,7 @@ class ParseZoneFile:
 
             if invalidline:
                pass
-                           
+
             ret.append(line)
             continue
 
@@ -288,7 +288,7 @@ class ParseZoneFile:
          hostname = None
          ttl = '0'
          rrclass = 'IN'
-         
+
          lp = partone.split()
          for i in range(len(lp)):
             if lp[i] == 'IN':
@@ -305,10 +305,10 @@ class ParseZoneFile:
             ttl = '0'
 
          ret.append(hostname + ' ' + ttl + ' IN ' + record_type + ' ' +parameter)
-            
+
       self._text = "\n".join(ret)
 
-   
+
    def _CapitalLetterKeys(self):
       """
       Keywords $ORIGIN and $TTL upercase
@@ -359,7 +359,7 @@ class ParseZoneFile:
             record_type = ''
             parameter = ''
 
-         
+
          if len(partone) > 0:
 
             hostname = ''
@@ -385,7 +385,7 @@ class ParseZoneFile:
             hostname = self.__lasthost
          else:
             self.__lasthost = hostname
-         
+
          if len(record_type) != 0:
             ret.append(hostname + ' ' + ttl + ' ' + record_type + ' ' + parameter)
 
@@ -500,7 +500,7 @@ class ParseZoneFile:
          else:
             record_dict_key = record_type.lower()
             parsed_records[record_dict_key].append(record_dict)
- 
+
       return parsed_records
 
 
@@ -596,7 +596,7 @@ class ParseZoneFile:
 
          if chr(9) in tok:
             tok = '"%s"' % tok
-            
+
          if ";" in tok:
             tok = tok.replace(";", "\;")
 
@@ -690,7 +690,7 @@ class ParseZoneFile:
             else:
                self.__ruleerror.append("$origin domain name not valid.")
                break
-      
+
       if counter != 1:
          self.__ruleerror.append("$origin should be present exactly once.")
 
@@ -718,7 +718,7 @@ class ParseZoneFile:
             else:
                self.__ruleerror.append("$ttl not valid.")
                continue
-      
+
       if counter != 1:
          self.__ruleerror.append("$ttl should be present exactly once.")
 
@@ -734,7 +734,7 @@ class ParseZoneFile:
             continue
          if line.upper().startswith('@ SOA'):
             counter += 1
-      
+
       if counter != 1:
          self.__ruleerror.append("@ SOA must be present exactly once.")
 
@@ -753,7 +753,7 @@ class ParseZoneFile:
          m = re.match(pattern, line, re.I)
          if m:
             counter += 1
-      
+
       if counter < 1:
          self.__ruleerror.append("@ NS must be present once.")
 
@@ -860,7 +860,7 @@ class ParseZoneFile:
 
          if linetokens[1] != 'SOA':
             self.__ruleerror.append("wrong SOA record! " + line)
-            
+
          master_name = linetokens[2]
          if not self.__check_hostname(master_name):
             self.__ruleerror.append("wrong master name in SOA record! " + line)
@@ -1236,7 +1236,7 @@ class ParseZoneFile:
             ret = True
       except:
          ret = False
-      
+
       return ret
 
 
@@ -1260,7 +1260,7 @@ class ParseZoneFile:
                ret = False
          except:
             ret = False
-      
+
       return ret
 
 
@@ -1278,7 +1278,7 @@ class ParseZoneFile:
          ret = True
       except:
          ret = False
-      
+
       return ret
 
 
@@ -1358,7 +1358,7 @@ class GenerateZoneFile:
    def showtext(self):
       return self._zonefile
 
-   
+
    def showjson(self):
       return self._zonejson
 
@@ -1387,7 +1387,7 @@ class GenerateZoneFile:
       Replace {$ttl} in template with $TTL record
       """
       record = ""
-      
+
       try:
          rowdata = self.__zonedict['$ttl']
       except:
@@ -1462,7 +1462,7 @@ class GenerateZoneFile:
          rowdata = self.__zonedict['ns']
       except:
          rowdata = None
-         
+
       self.__make_rr(rowdata, "NS", "host", "{ns}")
 
 
@@ -1474,7 +1474,7 @@ class GenerateZoneFile:
          rowdata = self.__zonedict['a']
       except:
          rowdata = None
-         
+
       self.__make_rr(rowdata, "A", "ip", "{a}")
 
 
@@ -1546,7 +1546,7 @@ class GenerateZoneFile:
          rowdata = self.__zonedict['txt']
       except:
          rowdata = None
-      
+
       if rowdata is None:
          rowdata_dup = None
       else:
@@ -1651,7 +1651,7 @@ class ZonefileLineParser(argparse.ArgumentParser):
 
 # -------------------------------------------------------------
 
- 
+
 class ConvertTime():
    """
    Convert Zonefile Time like 1H into seconds
@@ -1682,7 +1682,7 @@ class ConvertTime():
 
          if self.__unit == 'S':
             self.__intvalue = int(self.__txtvalue)
-            
+
          elif self.__unit == 'M':
             self.__intvalue = int(self.__txtvalue) * self.__minutes
 
