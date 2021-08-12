@@ -44,7 +44,7 @@ print(out.showtext())
 print ("--------------------------------------------")
 ```
 
-## Limitatzions
+## Limitations
 
 Only specific recorod keys are accepted.
 Not supported record keys will bo omitted from output.
