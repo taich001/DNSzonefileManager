@@ -47,7 +47,7 @@ print ("--------------------------------------------")
 ## Limitations
 
 Only specific recorod keys are accepted.
-Not supported record keys will bo omitted from output.
+Not supported record keys will be omitted from output.
 
 supported record types are:
 - $ORIGIN
